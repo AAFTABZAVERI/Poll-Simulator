@@ -32,9 +32,16 @@ app.get('/addCandidates',function(req,res){
 });
 
 app.post('/add',function(req,res){
-    candidates.push({name:req.body.name, votes:0});
-    totalcandidate++;
-    res.redirect('addCandidates');
+    if(!req.body.name)
+    {
+        res.render('addCandidates',{cans: candidates, msg: "Please Enter a candidate name"});
+    }
+    else{
+        candidates.push({name:req.body.name, votes:0});
+        totalcandidate++;
+        res.redirect('addCandidates');
+    }
+    
 });
 
 app.get('/vote',function(req,res){
@@ -42,6 +49,10 @@ app.get('/vote',function(req,res){
 });
 
 app.post('/votecount', function(req,res){
+    if(req.body.id.length==0)
+    {
+        res.render('vote',{cans: candidates, msg: "Please Enter your ID in order to vote"});
+    }
     if(votes.has(req.body.id)){
         res.render('vote',{cans: candidates, msg: "Sorry ! you can vote only once"});
     }
